@@ -1,0 +1,320 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Test Form for Feedback",
+        "formDescription": "Getting feedback for product X from our customers",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Email_id",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "age",
+              "fieldType": "number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Feedback",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Positive"
+                  },
+                  {
+                    "option": "Neutral"
+                  },
+                  {
+                    "option": "Negative"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        -688,
+        0
+      ],
+      "id": "b9c6c6c7-1b24-4532-abfb-37c0665806b1",
+      "name": "On form submission",
+      "webhookId": "f1a7d3f3-c358-43c8-889b-4080c24f97fa"
+    },
+    {
+      "parameters": {
+        "content": "## workflows\n\n## steps\n1. using the form submission node get the customer data\n2. Give discount to customer with positive feedback\n3. save the form data to Google sheets\n",
+        "height": 288,
+        "width": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1408,
+        -352
+      ],
+      "typeVersion": 1,
+      "id": "2a98d6f1-d2d8-4cae-aea9-055426a2f20d",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1QnGtM_HbQk1tJr7CiXDeHmGfPfuxaI-I321xb8XiYFg",
+          "mode": "list",
+          "cachedResultName": "Customer_Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QnGtM_HbQk1tJr7CiXDeHmGfPfuxaI-I321xb8XiYFg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QnGtM_HbQk1tJr7CiXDeHmGfPfuxaI-I321xb8XiYFg/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email_id": "={{ $json.Email_id }}",
+            "Name": "={{ $json.Name }}",
+            "Age": "={{ $json.age }}",
+            "Feedback": "={{ $json.Feedback }}",
+            "Give-Discount": "={{ $json['Give-Discount'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Email_id",
+              "displayName": "Email_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Age",
+              "displayName": "Age",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Feedback",
+              "displayName": "Feedback",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Give-Discount",
+              "displayName": "Give-Discount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -16,
+        0
+      ],
+      "id": "5601a9bf-7911-4937-a195-ec4fff6a9e04",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "QuKFrHlrrDakfICV",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7e93a412-c082-49c5-ac2c-edc0ec495a33",
+              "leftValue": "={{ $json.Feedback }}",
+              "rightValue": "Positive",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -464,
+        0
+      ],
+      "id": "9537c4c7-9f13-44dd-b577-f6e431aabc78",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5ad7db4b-4470-4fc7-9706-98ae0fc00bad",
+              "name": "Give-Discount",
+              "value": "Yes",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -240,
+        -96
+      ],
+      "id": "e9992d4b-a166-4f6a-a3e7-cc131cc4a73b",
+      "name": "Discount_Yes"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5ad7db4b-4470-4fc7-9706-98ae0fc00bad",
+              "name": "Give-Discount",
+              "value": "No",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -240,
+        96
+      ],
+      "id": "8615a7a1-16cc-4ade-a904-5d12cb40b3c4",
+      "name": "Discount_No"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Discount_Yes",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Discount_No",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Discount_Yes": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Discount_No": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "272fb9ff-88f3-46a7-93ec-10454b52589e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5934905a1218563c6ae3842006b052617d9a311f30a63d44d9fdffe2705931cb"
+  },
+  "nodeGroups": [],
+  "id": "kavI5Pyn2VBJ3laC",
+  "tags": []
+}
